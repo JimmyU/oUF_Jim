@@ -26,6 +26,12 @@ C.Font = {
 	Small_FontSize = 16,
 }
 
+C.Aura = {
+	icon_space = 7,
+	icon_size = 28,
+	show_player = true, -- 显示玩家身上的光环
+}
+
 C.Player = { -- 玩家
 	height = 32,
 	width = 280,

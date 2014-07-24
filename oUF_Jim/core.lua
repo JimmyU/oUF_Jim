@@ -49,6 +49,26 @@ end
 oUF.Tags.Events[G.addon.."hp_perc"] = "UNIT_HEALTH_FREQUENT"
 
 --===================================================--
+--------------------    [[ Auras ]]  ------------------
+--===================================================--
+
+local PostCreateIcon = function(Auras, Icon)
+    Icon.icon:SetTexCoord(.07, .93, .07, .93)
+	
+	Icon:CreateBeautyBorder(11)
+	Icon:SetBeautyBorderColor(.7, .7, .7)
+	Icon:SetBeautyBorderPadding(3, 3, 3, 3, 3, 3, 3, 3)
+	Icon:SetBeautyBorderTexture('white')
+end
+
+local PostUpdateGapIcon = function(auras, unit, icon, visibleBuffs)
+	for i = 1, auras:GetNumChildren() do
+		select(i, auras:GetChildren()):ShowBeautyBorder()
+	end
+	icon:HideBeautyBorder()
+end
+
+--===================================================--
 ---------------    [[ UnitShared ]]     ---------------
 --===================================================--
 
@@ -214,6 +234,25 @@ local UnitSpecific = {
         UnitShared(self, unit)
 		self:SetSize(C.Player.width, C.Player.height)
 		
+		if C.Aura.show_player then
+			local Auras = CreateFrame("Frame", G.addon..unit.." Auras", self)
+			Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 15)
+			Auras:SetSize(C.Player.width, C.Aura.icon_size*2+C.Aura.icon_space)
+			
+			Auras.disableCooldown = false
+			Auras.size = C.Aura.icon_size
+			Auras.onlyShowPlayer = false
+			Auras.showStealableBuffs = true
+			Auras.spacing = C.Aura.icon_space
+			Auras.numBuffs = 10
+			Auras.numDebuffs = 20
+			Auras.gap = true
+			
+			-- Register with oUF
+			self.Auras = Auras
+			Auras.PostCreateIcon = PostCreateIcon
+			Auras.PostUpdateGapIcon = PostUpdateGapIcon
+		end
     end,
 	
 	--========================--
@@ -223,6 +262,23 @@ local UnitSpecific = {
         UnitShared(self, unit)
 		self:SetSize(C.Target.width, C.Target.height)
 		
+		local Auras = CreateFrame("Frame", G.addon..unit.." Auras", self)
+		Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 15)
+		Auras:SetSize(C.Target.width, C.Aura.icon_size*2+C.Aura.icon_space)
+			
+		Auras.disableCooldown = false
+		Auras.size = C.Aura.icon_size
+		Auras.onlyShowPlayer = false
+		Auras.showStealableBuffs = true
+		Auras.spacing = C.Aura.icon_space
+		Auras.numBuffs = 10
+		Auras.numDebuffs = 20
+		Auras.gap = true
+			
+		-- Register with oUF
+		self.Auras = Auras
+		Auras.PostCreateIcon = PostCreateIcon
+		Auras.PostUpdateGapIcon = PostUpdateGapIcon
     end,
 	
     --========================--
@@ -232,6 +288,23 @@ local UnitSpecific = {
         UnitShared(self, unit)
 		self:SetSize(C.Focus.width, C.Focus.height)
 		
+		local Auras = CreateFrame("Frame", G.addon..unit.." Auras", self)
+		Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 15)
+		Auras:SetSize(C.Focus.width, C.Aura.icon_size*2+C.Aura.icon_space)
+			
+		Auras.disableCooldown = false
+		Auras.size = C.Aura.icon_size
+		Auras.onlyShowPlayer = false
+		Auras.showStealableBuffs = true
+		Auras.spacing = C.Aura.icon_space
+		Auras.numBuffs = 10
+		Auras.numDebuffs = 20
+		Auras.gap = true
+			
+		-- Register with oUF
+		self.Auras = Auras
+		Auras.PostCreateIcon = PostCreateIcon
+		Auras.PostUpdateGapIcon = PostUpdateGapIcon
     end,
 
     --========================--
@@ -268,6 +341,23 @@ local UnitSpecific = {
         UnitShared(self, unit)
 		self:SetSize(C.Boss.width, C.Boss.height)
 		
+		local Auras = CreateFrame("Frame", G.addon..unit.." Auras", self)
+		Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 15)
+		Auras:SetSize(C.Boss.width, C.Aura.icon_size*2+C.Aura.icon_space)
+			
+		Auras.disableCooldown = false
+		Auras.size = C.Aura.icon_size
+		Auras.onlyShowPlayer = false
+		Auras.showStealableBuffs = true
+		Auras.spacing = C.Aura.icon_space
+		Auras.numBuffs = 10
+		Auras.numDebuffs = 20
+		Auras.gap = true
+			
+		-- Register with oUF
+		self.Auras = Auras
+		Auras.PostCreateIcon = PostCreateIcon
+		Auras.PostUpdateGapIcon = PostUpdateGapIcon
     end,
 	
 	--========================--
@@ -277,6 +367,23 @@ local UnitSpecific = {
         UnitShared(self, unit)
 		self:SetSize(C.Arena.width, C.Arena.height)
 		
+		local Auras = CreateFrame("Frame", G.addon..unit.." Auras", self)
+		Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 15)
+		Auras:SetSize(C.Arena.width, C.Aura.icon_size*2+C.Aura.icon_space)
+			
+		Auras.disableCooldown = false
+		Auras.size = C.Aura.icon_size
+		Auras.onlyShowPlayer = false
+		Auras.showStealableBuffs = true
+		Auras.spacing = C.Aura.icon_space
+		Auras.numBuffs = 10
+		Auras.numDebuffs = 20
+		Auras.gap = true
+			
+		-- Register with oUF
+		self.Auras = Auras
+		Auras.PostCreateIcon = PostCreateIcon
+		Auras.PostUpdateGapIcon = PostUpdateGapIcon
     end,
 
 }
