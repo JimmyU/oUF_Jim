@@ -119,25 +119,41 @@ EventFrame:SetScript("OnEvent", function(eventframe, event, ...)
 		
 		oUF:Factory(function(self)
 			local playerframe = SpawnHelper(self, "player")
+			playerframe:SetPoint(C.Player.positon.a1, C.Player.positon.parent, C.Player.positon.a2, C.Player.positon.x, C.Player.positon.y)
 			
 			local targetframe = SpawnHelper(self, "target")
+			targetframe:SetPoint(C.Target.positon.a1, C.Target.positon.parent, C.Target.positon.a2, C.Target.positon.x, C.Target.positon.y)
 			
 			local focusframe = SpawnHelper(self, "focus")
+			focusframe:SetPoint(C.Focus.positon.a1, C.Focus.positon.parent, C.Focus.positon.a2, C.Focus.positon.x, C.Focus.positon.y)
 			
 			local petframe = SpawnHelper(self, "pet")
+			petframe:SetPoint(C.Pet.positon.a1, C.Pet.positon.parent, C.Pet.positon.a2, C.Pet.positon.x, C.Pet.positon.y)
 			
 			local totframe = SpawnHelper(self, "targettarget")
+			totframe:SetPoint(C.ToT.positon.a1, C.ToT.positon.parent, C.ToT.positon.a2, C.ToT.positon.x, C.ToT.positon.y)
 			
 			local tofframe = SpawnHelper(self, "focustarget")
+			tofframe:SetPoint(C.ToF.positon.a1, C.ToF.positon.parent, C.ToF.positon.a2, C.ToF.positon.x, C.ToF.positon.y)
 			
 			local bossframes = {}
 			for i = 1, MAX_BOSS_FRAMES do
 				bossframes["boss"..i] = SpawnHelper(self, "boss" .. i)
+				if i == 1 then
+					bossframes["boss"..i]:SetPoint(C.Boss.positon.a1, C.Boss.positon.parent, C.Boss.positon.a2, C.Boss.positon.x, C.Boss.positon.y)
+				else
+					bossframes["boss"..i]:SetPoint("TOP", bossframes["boss"..(i-1)], "BOTTOM", 0, -C.Boss.space)
+				end
 			end
 			
 			local arenaframes = {}
 			for i = 1, 5 do
 				arenaframes["arena"..i] = SpawnHelper(self, "arena" .. i)
+				if i == 1 then
+					arenaframes["arena"..i]:SetPoint(C.Arena.positon.a1, C.Arena.positon.parent, C.Arena.positon.a2, C.Arena.positon.x, C.Arena.positon.y)
+				else
+					arenaframes["arena"..i]:SetPoint("TOP", arenaframes["arena"..(i-1)], "BOTTOM", 0, -C.Arena.space)
+				end
 			end
 		end)
 		
