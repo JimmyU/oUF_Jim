@@ -103,6 +103,23 @@ local function UnitShared(self, u)
 			AltPowerBar.Text:SetText(cur)
 		end
     end
+		
+	-- 创建名字
+	local Name = Health:CreateFontString(nil, "OVERLAY")
+	Name:SetFont(G.font, 16, "OUTLINE")
+	Name:SetJustifyH("LEFT")
+	Name:SetPoint("TOPLEFT", Health, "TOPLEFT", 3, 9)
+	Name:SetPoint("TOPRIGHT", Health, "TOPRIGHT", -3, 9) -- 防止太长
+	
+    if unit == "player" or unit == "pet" then
+        Name:Hide()
+	elseif unit == "targettarget" or unit == "focustarget" or unit == "boss" or unit == "arena" then
+		self:Tag(Name, "[name]")
+    else
+		self:Tag(Name, "[difficulty][smartlevel]|r [raidcolor][smartclass]|r[shortclassification] [name] [status]")
+    end
+	
+    self.Name = Name
 	
 end
 
