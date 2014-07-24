@@ -8,6 +8,10 @@ local C, F, G, L = unpack(ns)
 local function UnitShared(self, u)
 	local unit = u:match("[^%d]+") -- boss1 -> boss
 
+	-- 鼠标悬停
+	self:SetScript("OnEnter", UnitFrame_OnEnter)
+    self:SetScript("OnLeave", UnitFrame_OnLeave)
+	
 end
 
 --===================================================--
