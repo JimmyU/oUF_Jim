@@ -20,6 +20,7 @@ local UnitSpecific = {
     --========================--
     player = function(self, unit)
         UnitShared(self, unit)
+		self:SetSize(C.Player.width, C.Player.height)
 		
     end,
 	
@@ -28,6 +29,7 @@ local UnitSpecific = {
     --========================--
     target = function(self, unit)
         UnitShared(self, unit)
+		self:SetSize(C.Target.width, C.Target.height)
 		
     end,
 	
@@ -36,6 +38,7 @@ local UnitSpecific = {
     --========================--
     focus = function(self, unit)
         UnitShared(self, unit)
+		self:SetSize(C.Focus.width, C.Focus.height)
 		
     end,
 
@@ -44,6 +47,7 @@ local UnitSpecific = {
     --========================--
     pet = function(self, unit)
         UnitShared(self, unit)
+		self:SetSize(C.Pet.width, C.Pet.height)
 		
     end,
 
@@ -52,6 +56,7 @@ local UnitSpecific = {
     --========================--
     targettarget = function(self, unit)
         UnitShared(self, unit)
+		self:SetSize(C.ToT.width, C.ToT.height)
 		
     end,
 
@@ -60,6 +65,7 @@ local UnitSpecific = {
     --========================--
     focustarget = function(self, unit)
         UnitShared(self, unit)
+		self:SetSize(C.ToF.width, C.ToF.height)
 		
     end,
 	
@@ -68,6 +74,7 @@ local UnitSpecific = {
     --========================--
     boss = function(self, unit)
         UnitShared(self, unit)
+		self:SetSize(C.Boss.width, C.Boss.height)
 		
     end,
 	
@@ -76,6 +83,7 @@ local UnitSpecific = {
     --========================--
     arena = function(self, unit)
         UnitShared(self, unit)
+		self:SetSize(C.Arena.width, C.Arena.height)
 		
     end,
 
