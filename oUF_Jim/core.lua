@@ -39,6 +39,36 @@ local function UnitShared(self, u)
 	-- 把它注册到oUF
 	self.Health = Health
 	
+	if not (unit == "targettarget" or unit == "focustarget") then -- 焦点的目标和目标的目标不要能量条
+	
+		-- 创建能量条
+		local Power = CreateFrame("StatusBar", G.addon..unit.." PowerBar", self)
+		Power:SetStatusBarTexture(G.media.bar)
+		Power:SetHeight(12)
+		Power:SetFrameLevel(5)
+		Power:SetPoint("TOPLEFT", Health, "BOTTOMLEFT", 5, 5)
+		Power:SetPoint("TOPRIGHT", Health, "BOTTOMRIGHT", -5, 5)
+	   
+		-- 加上背景
+		Power.Background = Power:CreateTexture(nil, 'BACKGROUND')
+		Power.Background:SetAllPoints(Power)
+		Power.Background:SetTexture(0.3, 0.3, 0.3)
+
+		-- 加上边框
+		Power:CreateBeautyBorder(11)
+		Power:SetBeautyBorderColor(.7, .7, .7)
+		Power:SetBeautyBorderPadding(2, 1, 2, 1, 2, 1, 2, 1)
+		Power:SetBeautyBorderTexture('white')
+
+		-- 选项
+		Power.frequentUpdates = true
+		Power.colorPower = true
+
+		-- 把它注册到oUF
+		self.Power = Power
+		
+	end
+	
 end
 
 --===================================================--
