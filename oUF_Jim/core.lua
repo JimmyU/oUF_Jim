@@ -1,6 +1,53 @@
 local addon_name, ns = ...
 local C, F, G, L = unpack(ns)
 
+F.ShortValue = function(val)
+	if (val >= 1e7) then
+		return ("%.1fkw"):format(val / 1e7)
+	elseif (val >= 1e4) then
+		return ("%.1fw"):format(val / 1e4)
+	else
+		return ("%d"):format(val)
+	end
+end
+--===================================================--
+--------------------    [[ Tags ]]  -------------------
+--===================================================--
+oUF.Tags.Methods[G.addon.."hp"] = function(u)
+	if UnitIsDead(u) then
+		return
+	else
+		return F.ShortValue(UnitHealth(u))
+	end
+end
+oUF.Tags.Events[G.addon.."hp"] = "UNIT_HEALTH_FREQUENT"
+
+oUF.Tags.Methods[G.addon.."pp"] = function(u)
+	if UnitIsDead(u) then
+		return
+	else
+		return F.ShortValue(UnitPower(u))
+	end
+end
+oUF.Tags.Events[G.addon.."pp"] = "UNIT_POWER_FREQUENT"
+
+oUF.Tags.Methods[G.addon.."hp_perc"] = function(u)
+	local hp = UnitHealth(u)
+	local max = UnitHealthMax(u)
+	if max == 0 or hp == max or UnitIsDead(u) then
+		return
+	elseif hp/max > 0.75 then
+		return "|cffFFFFFF"..math.floor(hp/max*100+.5).."|r"
+	elseif hp/max > 0.75 then
+		return "|cffFFFF00"..math.floor(hp/max*100+.5).."|r"
+	elseif hp/max > 0.25 then
+		return "|cffffa500"..math.floor(hp/max*100+.5).."|r"
+	else
+		return "|cffFF0000"..math.floor(hp/max*100+.5).."|r"
+	end
+end
+oUF.Tags.Events[G.addon.."hp_perc"] = "UNIT_HEALTH_FREQUENT"
+
 --===================================================--
 ---------------    [[ UnitShared ]]     ---------------
 --===================================================--
@@ -121,6 +168,38 @@ local function UnitShared(self, u)
 	
     self.Name = Name
 	
+	if not (unit == "targettarget" or unit == "focustarget" or unit == "pet") then
+	
+		-- 创建生命值
+		local Health_Value = Health:CreateFontString(nil, "OVERLAY")
+		Health_Value:SetFont(G.font, 16, "OUTLINE")
+		Health_Value:SetJustifyH("LEFT")
+		Health_Value:SetPoint("BOTTOMLEFT", Health, "BOTTOMLEFT", 3, 6)
+	
+		self:Tag(Health_Value, "["..G.addon.."hp]")
+		
+		-- 创建能量值
+		local Power_Value = Health:CreateFontString(nil, "OVERLAY")
+		Power_Value:SetFont(G.font, 16, "OUTLINE")
+		Power_Value:SetJustifyH("RIGHT")
+		Power_Value:SetPoint("BOTTOMRIGHT", Health, "BOTTOMRIGHT", -3, 6)
+	
+		self:Tag(Power_Value, "["..G.addon.."pp]")
+		
+		-- 创建生命值百分比
+		local Health_Perc = Health:CreateFontString(nil, "OVERLAY")
+		Health_Perc:SetFont(G.font, 24, "OUTLINE")
+		if unit == "player" then
+			Health_Perc:SetPoint("LEFT", Health, "RIGHT", 5, 0)
+			Health_Perc:SetJustifyH("LEFT")
+		else
+			Health_Perc:SetPoint("RIGHT", Health, "LEFT", -5, 0)
+			Health_Perc:SetJustifyH("RIGHT")
+		end
+	
+		self:Tag(Health_Perc, "["..G.addon.."hp_perc]")
+		
+	end	
 end
 
 --===================================================--
