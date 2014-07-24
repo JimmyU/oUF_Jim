@@ -1,0 +1,8 @@
+## Interface: 50400
+## Author: JimmyU
+## Title: oUF_Jim
+## Notes: My Unitframe Mods
+## RequiredDeps: oUF, !Beautycase
+
+config.lua
+core.lua
