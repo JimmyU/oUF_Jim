@@ -12,6 +12,33 @@ local function UnitShared(self, u)
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
     self:SetScript("OnLeave", UnitFrame_OnLeave)
 	
+	-- 创建生命条
+	local Health = CreateFrame("StatusBar", G.addon..unit.." HealthBar", self)
+	Health:SetStatusBarTexture(G.media.bar)
+	Health:SetAllPoints()
+	
+	-- 加上背景
+	Health.Background = Health:CreateTexture(nil, 'BACKGROUND')
+	Health.Background:SetAllPoints(Health)
+	Health.Background:SetTexture(0.3, 0.3, 0.3)
+   
+	-- 加上边框
+	Health:CreateBeautyBorder(11)
+	Health:SetBeautyBorderColor(.7, .7, .7)
+	Health:SetBeautyBorderPadding(2, 1, 2, 1, 2, 1, 2, 1)
+	Health:SetBeautyBorderTexture('white')
+	
+	-- 选项
+	Health.frequentUpdates = true
+	Health.colorTapping = true
+	Health.colorDisconnected = true
+	Health.colorClass = true
+	Health.colorReaction = true
+	Health.colorHealth = true
+   
+	-- 把它注册到oUF
+	self.Health = Health
+	
 end
 
 --===================================================--
