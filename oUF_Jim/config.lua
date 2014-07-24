@@ -32,6 +32,15 @@ C.Aura = {
 	show_player = true, -- 显示玩家身上的光环
 }
 
+C.Castbar = {
+	-- 玩家施法条
+	height = 20,
+	width = 280,
+	positon = {a1 = "CENTER", parent= "UIParent", a2 = "CENTER", x = "0", y = "-160"}, 
+	-- 其他施法条
+	height_2 = 20,
+}
+
 C.Player = { -- 玩家
 	height = 32,
 	width = 280,

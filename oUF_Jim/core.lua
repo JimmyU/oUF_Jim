@@ -69,6 +69,114 @@ local PostUpdateGapIcon = function(auras, unit, icon, visibleBuffs)
 end
 
 --===================================================--
+-----------------    [[ Castbar ]]     ----------------
+--===================================================--
+
+local CreateCastbars = function(self, unit)
+		
+	-- 创建施法条
+    local Castbar = CreateFrame("StatusBar", G.addon..unit.." CastBar", self)
+	Castbar:SetStatusBarTexture(G.media.bar)
+	Castbar:SetStatusBarColor( .35, .65, 1, 1)
+
+	-- 加上背景
+	Castbar.Background = Castbar:CreateTexture(nil, 'BACKGROUND')
+	Castbar.Background:SetAllPoints(Castbar)
+	Castbar.Background:SetTexture(0.3, 0.3, 0.3)
+	   
+	-- 加上边框
+	Castbar:CreateBeautyBorder(11)
+	Castbar:SetBeautyBorderColor(.7, .7, .7)
+	Castbar:SetBeautyBorderPadding(3, 3, 3, 3, 3, 3, 3, 3)
+	Castbar:SetBeautyBorderTexture('white')
+	
+	-- 施法条上的高亮标记
+    Castbar.Spark = Castbar:CreateTexture(nil, "OVERLAY")
+	Castbar.Spark:SetTexture("Interface\\UnitPowerBarAlt\\Generic1Player_Pill_Flash")
+    Castbar.Spark:SetBlendMode("ADD")
+    Castbar.Spark:SetAlpha(1)
+	if unit == "player" then
+		Castbar.Spark:SetSize(8, C.Castbar.height+8)
+	else
+		Castbar.Spark:SetSize(8, C.Castbar.height_2+8)
+	end
+		
+	-- 施法时间
+    Castbar.Time = Castbar:CreateFontString(nil, "OVERLAY")
+	if unit == "player" then
+		Castbar.Time:SetFont(G.font, 16, "OUTLINE")
+	else
+		Castbar.Time:SetFont(G.font, 12, "OUTLINE")	
+	end
+	Castbar.Time:SetPoint("RIGHT", Castbar, "RIGHT", -5, 0)	
+	Castbar.Time:SetJustifyH("RIGHT")
+	
+	-- 法术名称
+    Castbar.Name = Castbar:CreateFontString(nil, "OVERLAY")
+	if unit == "player" then
+		Castbar.Name:SetFont(G.font, 16, "OUTLINE")
+	else
+		Castbar.Name:SetFont(G.font, 12, "OUTLINE")	
+	end
+	Castbar.Name:SetPoint("LEFT", Castbar, "LEFT", 5, 0)	
+	Castbar.Name:SetJustifyH("LEFT")
+	
+	-- 法术图标
+	Castbar.IconFrame = CreateFrame("Frame", G.addon..unit.." CastBar IconFrame", Castbar)
+	Castbar.IconFrame:SetPoint("RIGHT", Castbar, "LEFT", -7, 0)
+	if unit == "player" then
+		Castbar.IconFrame:SetSize(C.Castbar.height, C.Castbar.height)
+	else
+		Castbar.IconFrame:SetSize(C.Castbar.height_2, C.Castbar.height_2)	
+	end
+	
+	-- 图标的边框
+	Castbar.IconFrame:CreateBeautyBorder(11)
+	Castbar.IconFrame:SetBeautyBorderColor(.7, .7, .7)
+	Castbar.IconFrame:SetBeautyBorderPadding(3, 3, 3, 3, 3, 3, 3, 3)
+	Castbar.IconFrame:SetBeautyBorderTexture('white')
+	
+	-- 图标材质
+        Castbar.Icon = Castbar.IconFrame:CreateTexture(nil, "ARTWORK")
+        Castbar.Icon:SetTexCoord(.1, .9, .1, .9)
+	Castbar.Icon:SetAllPoints(Castbar.IconFrame)
+
+	-- 延迟条
+    if unit == "player" then
+        Castbar.SafeZone = Castbar:CreateTexture(nil, "OVERLAY")
+        Castbar.SafeZone:SetTexture(G.media.blank)
+        Castbar.SafeZone:SetVertexColor( 1, 1, 1, .5)
+    end
+	
+	-- 不能打断的法术改变边框颜色
+    Castbar.PostCastStart = function(Castbar, unit)
+		if unit == "player" then
+			Castbar:SetBeautyBorderColor(.7, .7, .7)
+		else
+			if Castbar.interrupt then
+				Castbar:SetBeautyBorderColor(1, 1, 0)
+			else
+				Castbar:SetBeautyBorderColor(.7, .7, .7)
+			end
+		end
+	end
+	
+    Castbar.PostChannelStart = function(Castbar, unit)
+		if unit == "player" then
+			Castbar:SetBeautyBorderColor(.7, .7, .7)
+		else
+			if Castbar.interrupt then
+				Castbar:SetBeautyBorderColor(1, 1, 0)
+			else
+				Castbar:SetBeautyBorderColor(.7, .7, .7)
+			end
+		end
+	end
+	
+	self.Castbar = Castbar
+end
+
+--===================================================--
 ---------------    [[ UnitShared ]]     ---------------
 --===================================================--
 
@@ -253,6 +361,10 @@ local UnitSpecific = {
 			Auras.PostCreateIcon = PostCreateIcon
 			Auras.PostUpdateGapIcon = PostUpdateGapIcon
 		end
+		
+		CreateCastbars(self, unit)
+		self.Castbar:SetSize(C.Castbar.width, C.Castbar.height)
+		self.Castbar:SetPoint(C.Castbar.positon.a1, C.Castbar.positon.parent, C.Castbar.positon.a2, C.Castbar.positon.x, C.Castbar.positon.y)
     end,
 	
 	--========================--
@@ -279,6 +391,11 @@ local UnitSpecific = {
 		self.Auras = Auras
 		Auras.PostCreateIcon = PostCreateIcon
 		Auras.PostUpdateGapIcon = PostUpdateGapIcon
+		
+		CreateCastbars(self, unit)
+		self.Castbar:SetHeight(C.Castbar.height_2)
+		self.Castbar:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", C.Castbar.height_2+7, -5)
+		self.Castbar:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -5)
     end,
 	
     --========================--
@@ -305,6 +422,11 @@ local UnitSpecific = {
 		self.Auras = Auras
 		Auras.PostCreateIcon = PostCreateIcon
 		Auras.PostUpdateGapIcon = PostUpdateGapIcon
+		
+		CreateCastbars(self, unit)
+		self.Castbar:SetHeight(C.Castbar.height_2)
+		self.Castbar:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", C.Castbar.height_2+7, -5)
+		self.Castbar:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -5)
     end,
 
     --========================--
@@ -358,6 +480,11 @@ local UnitSpecific = {
 		self.Auras = Auras
 		Auras.PostCreateIcon = PostCreateIcon
 		Auras.PostUpdateGapIcon = PostUpdateGapIcon
+		
+		CreateCastbars(self, unit)
+		self.Castbar:SetHeight(C.Castbar.height_2)
+		self.Castbar:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", C.Castbar.height_2+7, -5)
+		self.Castbar:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -5)
     end,
 	
 	--========================--
@@ -384,6 +511,11 @@ local UnitSpecific = {
 		self.Auras = Auras
 		Auras.PostCreateIcon = PostCreateIcon
 		Auras.PostUpdateGapIcon = PostUpdateGapIcon
+		
+		CreateCastbars(self, unit)
+		self.Castbar:SetHeight(C.Castbar.height_2)
+		self.Castbar:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", C.Castbar.height_2+7, -5)
+		self.Castbar:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -5)
     end,
 
 }
