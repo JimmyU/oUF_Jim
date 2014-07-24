@@ -69,6 +69,41 @@ local function UnitShared(self, u)
 		
 	end
 	
+	if unit == "player" or unit == "boss" or unit == "pet" then -- 只有玩家，首领和宠物（载具）需要特殊能量条
+		
+		-- 创建特殊能量条
+		local AltPowerBar = CreateFrame("StatusBar", G.addon..unit.." AltPowerBar", self)
+		AltPowerBar:SetStatusBarTexture(G.media.bar)
+		AltPowerBar:SetHeight(12)
+		AltPowerBar:SetFrameLevel(5)
+		AltPowerBar:SetPoint("TOPLEFT", Power, "BOTTOMLEFT", 5, 5)
+		AltPowerBar:SetPoint("TOPRIGHT", Power, "BOTTOMRIGHT", -5, 5)
+		
+		-- 加上背景
+		AltPowerBar.Background = AltPowerBar:CreateTexture(nil, 'BACKGROUND')
+		AltPowerBar.Background:SetAllPoints(AltPowerBar)
+		AltPowerBar.Background:SetTexture(0.3, 0.3, 0.3)
+	   
+		-- 加上边框
+		AltPowerBar:CreateBeautyBorder(11)
+		AltPowerBar:SetBeautyBorderColor(.7, .7, .7)
+		AltPowerBar:SetBeautyBorderPadding(2, 1, 2, 1, 2, 1, 2, 1)
+		AltPowerBar:SetBeautyBorderTexture('white')
+		
+		-- 在上面创建一个文本，用于显示数值
+		AltPowerBar.Text = AltPowerBar:CreateFontString(nil, "OVERLAY")
+		AltPowerBar.Text:SetFont(G.font, 12, "OUTLINE")
+		AltPowerBar.Text:SetJustifyH("CENTER")
+		
+		-- 把它注册到oUF
+		self.AltPowerBar = AltPowerBar
+		
+		-- 更新能量条时更新文本数值
+		self.AltPowerBar.PostUpdate = function(AltPowerBar, min, cur, max)
+			AltPowerBar.Text:SetText(cur)
+		end
+    end
+	
 end
 
 --===================================================--
